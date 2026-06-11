@@ -1,64 +1,133 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Interactive Drag-and-Drop Form Builder UI
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A highly responsive, premium-grade, interactive Form Builder built directly inside a Laravel application. This tool allows users to build custom HTML forms by dragging elements onto a canvas, configuring parameters (labels, validation, placeholder, etc.) live in real-time, reordering elements, duplicating/deleting fields, and previewing the live form output rendered via custom Laravel Blade Components.
 
-## About Laravel 
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Local Installation & Setup
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Follow these simple steps to run the Form Builder application locally:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Clone & Enter Directory**:
+   ```bash
+   cd edunet_frontend_ui_dev_assigment
+   ```
 
-## Learning Laravel
+2. **Install Composer Dependencies**:
+   ```bash
+   composer install
+   ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. **Set Up Environment**:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. **Run Server**:
+   ```bash
+   php artisan serve
+   ```
+   The application will be running locally at `http://127.0.0.1:8000`.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## 🛠️ Tech Stack & Library Choices
 
-### Premium Partners
+- **Laravel Blade (PHP/Backend)**: Used for compiling and structuring all form components. Every single form input is backed by a dedicated Blade component located at `resources/views/components/fields/*.blade.php`. This strictly adheres to the requirement that no raw HTML input fields are output outside Blade components.
+- **SortableJS (D&D Library)**: Selected for drag-and-drop mechanics.
+  - *Rationale*: SortableJS has zero dependencies, is incredibly fast (uses hardware-accelerated CSS transitions), handles list reordering smoothly, and supports clone dragging from a sidebar palette directly into a dynamic canvas. It behaves beautifully with virtual DOM structures and provides natural drag handle hooks.
+- **Alpine.js (State Management)**: Powers the builder's reactive state, option panel synchronization, and action history logic.
+  - *Rationale*: Alpine offers lightweight, declarative, reactive data bindings that sit naturally on top of compiled Laravel Blade views without requiring a heavy client-side build compilation (like React or Vue). This makes the builder codebase clean, maintainable, and easily extendable.
+- **Tailwind CSS**: Custom layouts, grid widths, focus transitions, and modern visual palettes.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+---
 
-## Contributing
+## 📐 Key Design Assumptions & Architecture
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. **Dual-Mode Blade Components**: 
+   Blade components accept an `:is-builder` flag. 
+   - When `true`, they output Alpine.js reactive attribute bindings (e.g. `:placeholder="field.placeholder"`, `x-text="field.label"`). This allows edits in the right options pane to reflect instantly in the builder canvas.
+   - When `false`, they render standard static HTML attributes, perfect for the **Form Preview** and actual final deployment.
+2. **Independent Canvas & Sidebar**:
+   The canvas and sidebar scroll independently to ensure a smooth, desktop-app-like user experience. The builder is fully responsive and reflows into a single column at widths below `1024px`.
+3. **No-API AJAX Preview**:
+   When toggling **Preview Mode**, the client posts the JSON form schema back to the Laravel controller which compiles the actual production Blade elements server-side and sends back the HTML chunk dynamically, showing exact visual parity between editor and live states.
+4. **Action History**:
+   State modification events (adds, deletions, reorders, property edits) push snapshots onto an `undoStack` (up to 50 deep) to power smooth Ctrl+Z (Undo) and Ctrl+Y (Redo) flows.
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 📄 Sample JSON Output Schema
 
-## Security Vulnerabilities
+When the user clicks "Export Schema" or "Next" in the footer, the state is serialized into the following structured JSON format:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```json
+{
+    "title": "Registration Form",
+    "submissionUrl": "/api/v1/register",
+    "fields": [
+        {
+            "id": "field_init_text",
+            "type": "text",
+            "label": "Full Name",
+            "name": "full_name",
+            "placeholder": "Enter your name...",
+            "required": true,
+            "defaultValue": "",
+            "class": "col-span-2",
+            "minChars": "",
+            "maxChars": ""
+        },
+        {
+            "id": "field_init_email",
+            "type": "email",
+            "label": "Email Address",
+            "name": "email",
+            "placeholder": "name@example.com",
+            "required": true,
+            "defaultValue": "",
+            "class": "col-span-1"
+        },
+        {
+            "id": "field_1781192534562_a4g7m",
+            "type": "dropdown",
+            "label": "Membership Level",
+            "name": "dropdown_8d9g",
+            "placeholder": "Select membership level...",
+            "required": true,
+            "options": [
+                "Basic Free",
+                "Professional ($15/mo)",
+                "Enterprise Custom"
+            ],
+            "class": "col-span-1"
+        },
+        {
+            "id": "field_1781192622441_u8a2b",
+            "type": "checkbox",
+            "label": "Interests & Topics",
+            "name": "checkbox_f3g2",
+            "required": false,
+            "options": [
+                "Software Engineering",
+                "Product Design",
+                "Data Science",
+                "Marketing"
+            ],
+            "defaultValues": [
+                "Software Engineering",
+                "Product Design"
+            ],
+            "class": "col-span-2"
+        },
+        {
+            "id": "field_1781192700511_x9r2d",
+            "type": "hidden",
+            "label": "source_channel",
+            "name": "utm_source",
+            "defaultValue": "organic_search"
+        }
+    ]
+}
+```
