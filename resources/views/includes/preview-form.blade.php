@@ -8,7 +8,7 @@
         @endforeach
     </div>
     <div class="flex justify-end pt-6 border-t border-gray-100">
-        <button type="submit" class="px-6 py-2.5 bg-indigo-650 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all">
+        <button type="submit" class="px-6 py-2.5 bg-black hover:bg-black text-white font-semibold rounded-lg shadow-md transition-all">
             Submit Form
         </button>
     </div>

@@ -558,7 +558,7 @@
 
             <!-- INTERACTIVE PREVIEW (Active when view mode = preview) -->
             <div x-show="activeViewMode === 'preview'" class="max-w-4xl mx-auto">
-                <div class="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+                <div class="bg-white rounded-xl p-8 shadow-sm">
                     <div class="border-b border-gray-200 pb-4 mb-6">
                         <h2 class="text-2xl font-semibold text-gray-900" style="letter-spacing: -0.3px;" x-text="title || 'Untitled Form'"></h2>
                         <span class="text-xs text-gray-400 font-mono" x-text="'POST target: ' + submissionUrl"></span>
