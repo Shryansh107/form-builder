@@ -811,7 +811,19 @@
                         <!-- Field Type indicator -->
                         <div class="p-3 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between">
                             <span class="text-xs font-semibold text-gray-700 uppercase tracking-wider">Field settings</span>
-                            <span class="text-[10px] bg-gray-900 text-white font-bold px-2.5 py-0.5 rounded-full uppercase" x-text="activeField.type"></span>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-[10px] bg-gray-900 text-white font-bold px-2.5 py-0.5 rounded-full uppercase" x-text="activeField.type"></span>
+                                <button 
+                                    type="button" 
+                                    @click="deleteField(activeField.id)"
+                                    class="p-1.5 bg-red-50 hover:bg-red-100 text-red-650 hover:text-red-750 border border-red-200 rounded transition-colors flex items-center"
+                                    title="Delete Field"
+                                >
+                                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- 1. Layout Fields specific controls -->
@@ -1134,6 +1146,20 @@
                                 </label>
                             </div>
                         </template>
+
+                        <!-- Delete Field Button -->
+                        <div class="border-t border-gray-150 pt-5">
+                            <button 
+                                type="button" 
+                                @click="deleteField(activeField.id)"
+                                class="w-full py-2.5 bg-red-50 hover:bg-red-100 text-red-650 hover:text-red-750 border border-red-200 rounded-lg text-xs font-bold transition-all text-center focus:outline-none flex items-center justify-center space-x-2"
+                            >
+                                <svg class="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                <span>Delete Field</span>
+                            </button>
+                        </div>
                     </div>
                 </template>
             </div>
